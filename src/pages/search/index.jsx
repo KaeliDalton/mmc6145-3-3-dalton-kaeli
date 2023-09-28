@@ -16,12 +16,15 @@ export default function Search() {
   // TODO: When the Search Page loads, use useEffect to fetch data from:
   // https://www.googleapis.com/books/v1/volumes?langRestrict=en&maxResults=16&q=YOUR_QUERY
   // Use a query of "React"
+
 useEffect(() => {
   setFetching(true)
   async function findBooks(){
     const res = await fetch('https://www.googleapis.com/books/v1/volumes?langRestrict=en&maxResults=16&q=React')
     const data = await res.json()
-    setBookSearchResults(data.items)
+    if (data && data.items){
+      setBookSearchResults(data.items)
+    }
     setFetching(false)
     setPreviousQuery(query)
   }
@@ -36,13 +39,16 @@ useEffect(() => {
 
   async function handleSubmit(e){
     e.preventDefault()
-    if( fetching == true || query == previousQuery || query == ""){
+    //passes test but still searches an empty string
+    if(fetching == true || query == previousQuery || query===""){
       return
     }
     setFetching(true)
     const res = await fetch('https://www.googleapis.com/books/v1/volumes?langRestrict=en&maxResults=16&q=' + query)
     const data = await res.json()
-    setBookSearchResults(data.items)
+    if (data && data.items){
+      setBookSearchResults(data.items)
+    }
     setFetching(false)
     setPreviousQuery(query)
   }
